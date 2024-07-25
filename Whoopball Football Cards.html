@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whoopball Football Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77aaff 3px solid;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            float: left;
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h1 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        .search-bar {
+            margin: 20px 0;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: #fff;
+            margin: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1 0 21%;
+            box-sizing: border-box;
+        }
+        .card img {
+            max-width: 100%;
+        }
+        .card button {
+            display: block;
+            width: 100%;
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        .card button:hover {
+            background: #77aaff;
+        }
+        .cart {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .cart ul {
+            padding: 0;
+            list-style: none;
+        }
+        .cart li {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart button.remove-btn {
+            background: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .cart button.remove-btn:hover {
+            background: #e60000;
+        }
+        .payment-form, .contact-form {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .payment-form input, .contact-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .payment-form button, .contact-form button {
+            width: 100%;
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        .payment-form button:hover, .contact-form button:hover {
+            background: #77aaff;
+        }
+        @media (max-width: 768px) {
+            .cards {
+                flex-direction: column;
+            }
+            .card {
+                flex: 1 0 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>Whoopball Football Cards</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#" onclick="showContactForm()">Contact</a></li>
+                    <li><a href="#" onclick="showPaymentForm()">Payment</a></li>
+                    <li><a href="https://www.youtube.com/channel/UC0_KkM9Hc_LRBd1HnWWuIUg" target="_blank">Our YouTube Channel</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search for cards..." oninput="searchCards()">
+        </div>
+        <h2>Football Cards</h2>
+        <div class="cards" id="card-list">
+            <!-- Football cards will be injected here by JavaScript -->
+        </div>
+
+        <div class="cart" id="cart">
+            <h3>Shopping Cart</h3>
+            <ul id="cart-items">
+                <!-- Cart items will be injected here by JavaScript -->
+            </ul>
+            <p id="cart-total"><strong>Total Price:</strong> $0.00</p>
+        </div>
+
+        <div class="payment-form" id="payment-form">
+            <h3>Payment Information</h3>
+            <div id="cart-summary">
+                <!-- Cart summary will be injected here by JavaScript -->
+            </div>
+            <form onsubmit="processPayment(event)">
+                <input type="text" id="card-name" placeholder="Name on Card" required>
+                <input type="text" id="card-number" placeholder="Card Number" required pattern="\d{16}" title="Please enter a valid 16-digit card number">
+                <input type="text" id="card-expiry" placeholder="Expiry Date (MM/YY)" required pattern="\d{2}/\d{2}" title="Please enter a valid expiry date (MM/YY)">
+                <input type="text" id="card-cvc" placeholder="CVC" required pattern="\d{3}" title="Please enter a valid 3-digit CVC">
+                <button type="submit">Pay Now</button>
+            </form>
+        </div>
+
+        <div class="contact-form" id="contact-form">
+            <h3>Contact Us</h3>
+            <p>If you need to get in touch with us, please use the following contact information:</p>
+            <p><strong>Email:</strong> support@footballcardshop.com</p>
+            <p><strong>Phone:</strong> +1 800 123 4567</p>
+            <p><strong>Address:</strong> 123 Football Lane, Card City, FC 12345</p>
+        </div>
+    </div>
+
+    <script>
+        const cards = [
+            { id: 1, name: 'Luca Bucci Calcio 97 Card', price: 10, image: '13-923602272.jpg' },
+            { id: 2, name: 'Javier Adelmar Zanetti Calcio 97 Card', price: 10, image: '80-961926008.jpg' },
+            { id: 3, name: 'Aron Winter Calcio 97 Card', price: 10, image: '54-3681541869.jpg' },
+            { id: 4, name: 'Marco Simone Calcio 97 Card', price: 10, image: '98-4139207963.jpg' },
+            { id: 5, name: 'Kennet Anderson Calcio 97 Card', price: 10, image: 'pdf_90996020-32c0-11e3-802a-d1f3261c229b.jpg' },
+            { id: 6, name: 'Oliver Bierhoff Calcio 97 Card', price: 10, image: '100-3830124421.jpg' },
+            { id: 7, name: 'Hernan Crespo Calcio 97 Card', price: 10, image: '86-1727596842.jpg' },
+            { id: 8, name: 'Daniel Fonseca Calcio 97 Card', price: 10, image: '109-1191864334.jpg' },
+            { id: 9, name: 'Alessandro Del Piero Calcio 97 Card', price: 10, image: 's-l1200.jpg' },
+            { id: 10, name: 'Alisson Becker Top Master Panini Fifa 365 card', price: 10, image: 'Panini_FIFA_365_2024_Adrenalyn_XL_Alisson_Top_Master_kartya_445412367773560-4111682799.jpg' },
+            { id: 11, name: 'Ronald Keoman Legend Signature Style Euro 2024 Topps', price: 10, image: 's-l400-893658692.jpg' },
+            { id: 12, name: 'Roberto Firminio Premier League Signature Panini Card', price: 10, image: 'Panini-Adrenalyn-XL-PLUS-Premier-League-2023-ROBERTO-2990735844.jpg' },
+            { id: 13, name: 'Rafael Leao Man Of The Match Signature Style Champions League Topps 2024', price: 10, image: 'Match-Attax-2023-2024-23-24-Rafael-Leao-1067950891.jpg' },
+            { id: 14, name: 'Strahinja Pavlovic Man Of The Match Signature Style Champions League Topps 2024', price: 10, image: 'Match-Attax-23-24-Man-of-the-Match-Signature-97626045.jpg' },
+            { id: 15, name: 'Erling Haaland Finest Footballer Limited Edition Champions League Topps 2024', price: 6, image: 'Card-Topps-Match-Attax-2023-24-Limited-Edition-3363360367.jpg' },
+            { id: 16, name: 'Vinicius Junior Turbo Talent Limited Edition Champions League Topps 2024', price: 6, image: 'Card-Topps-Match-Attax-2023-24-Limited-Edition-Vinicius-1427799372.jpg' },
+            { id: 17, name: 'Marco Veratti Pro Elite Shield Champions League Topps 2024', price: 8, image: 'Topps-Match-Attax-2023-24-2024-Marco-Verratti-Pro-3425113940.jpg' },
+            { id: 18, name: 'Paulo Dybala Man Of The Match Signature Style Champions League Topps 2024', price: 10, image: 'Match-Attax-2023-2024-23-24-Paulo-Dybala-2365068884.jpg' },
+            { id: 19, name: 'Marcus Rashford Black Edge Edition Champions League Topps 2024', price: 8, image: 's-l500-3569145769.jpg' },
+            { id: 20, name: 'Gabriel Jesus Black Edge Edition Champions League Topps 2024', price: 8, image: 'Topps-Match-Attax-23-24-Black-Edge-Edition-Gabriel-2789004052.jpg' },
+            { id: 21, name: 'Kylian Mbappe Unbeatable Panini Top Class 2024', price: 15, image: 'Kylian-Mbappe-Card-Panini-Top-Class-2023-264-397923577.jpg' },
+            { id: 22, name: 'Larsson Cult Hero Champions League Topps 2024', price: 9, image: 'Match-Attax-Champions-League-2023-2024-440-Cult-Hero- -Henrik-784023782.jpg' },
+            { id: 23, name: '', price: 15, image: 'https://via.placeholder.com/150' },
+            { id: 24, name: 'Player 24', price: 32, image: 'https://via.placeholder.com/150' },
+            { id: 25, name: 'Player 25', price: 22, image: 'https://via.placeholder.com/150' },
+            { id: 26, name: 'Player 26', price: 27, image: 'https://via.placeholder.com/150' },
+            { id: 27, name: 'Player 27', price: 18, image: 'https://via.placeholder.com/150' },
+            { id: 28, name: 'Player 28', price: 25, image: 'https://via.placeholder.com/150' },
+            { id: 29, name: 'Player 29', price: 17, image: 'https://via.placeholder.com/150' },
+            { id: 30, name: 'Player 30', price: 19, image: 'https://via.placeholder.com/150' },
+            { id: 31, name: 'Player 31', price: 16, image: 'https://via.placeholder.com/150' },
+            { id: 32, name: 'Player 32', price: 23, image: 'https://via.placeholder.com/150' },
+            { id: 33, name: 'Player 33', price: 20, image: 'https://via.placeholder.com/150' },
+            { id: 34, name: 'Player 34', price: 22, image: 'https://via.placeholder.com/150' },
+            { id: 35, name: 'Player 35', price: 28, image: 'https://via.placeholder.com/150' },
+            { id: 36, name: 'Player 36', price: 14, image: 'https://via.placeholder.com/150' },
+            { id: 37, name: 'Player 37', price: 31, image: 'https://via.placeholder.com/150' },
+            { id: 38, name: 'Player 38', price: 24, image: 'https://via.placeholder.com/150' },
+            { id: 39, name: 'Player 39', price: 26, image: 'https://via.placeholder.com/150' },
+            { id: 40, name: 'Player 40', price: 21, image: 'https://via.placeholder.com/150' },
+            { id: 41, name: 'Player 41', price: 19, image: 'https://via.placeholder.com/150' },
+            { id: 42, name: 'Player 42', price: 29, image: 'https://via.placeholder.com/150' },
+            { id: 43, name: 'Player 43', price: 25, image: 'https://via.placeholder.com/150' },
+            { id: 44, name: 'Player 44', price: 27, image: 'https://via.placeholder.com/150' },
+            { id: 45, name: 'Player 45', price: 23, image: 'https://via.placeholder.com/150' },
+            { id: 46, name: 'Player 46', price: 30, image: 'https://via.placeholder.com/150' },
+        ];
+
+        const cardList = document.getElementById('card-list');
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const paymentForm = document.getElementById('payment-form');
+        const contactForm = document.getElementById('contact-form');
+        const cartSummary = document.getElementById('cart-summary');
+        const cart = [];
+
+        function renderCards(cardsToRender) {
+            cardList.innerHTML = '';
+            cardsToRender.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.innerHTML = `
+                    <img src="${card.image}" alt="${card.name}">
+                    <h3>${card.name}</h3>
+                    <p>$${card.price}</p>
+                    <button onclick="addToCart(${card.id})">Add to Cart</button>
+                `;
+                cardList.appendChild(cardElement);
+            });
+        }
+
+        function addToCart(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            cart.push(card);
+            renderCart();
+        }
+
+        function removeFromCart(cardId) {
+            const index = cart.findIndex(c => c.id === cardId);
+            if (index > -1) {
+                cart.splice(index, 1);
+                renderCart();
+            }
+        }
+
+        function renderCart() {
+            cartItems.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${item.name} - $${item.price}
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+                cartItems.appendChild(li);
+                total += item.price;
+            });
+            cartTotal.innerHTML = `<strong>Total Price:</strong> $${total.toFixed(2)}`;
+            renderCartSummary();
+        }
+
+        function searchCards() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const filteredCards = cards.filter(card => card.name.toLowerCase().includes(query));
+            renderCards(filteredCards);
+        }
+
+        function showPaymentForm() {
+            paymentForm.style.display = 'block';
+            contactForm.style.display = 'none';
+            renderCartSummary();
+        }
+
+        function showContactForm() {
+            contactForm.style.display = 'block';
+            paymentForm.style.display = 'none';
+        }
+
+        function renderCartSummary() {
+            cartSummary.innerHTML = '<h3>Cart Summary</h3>';
+            cart.forEach(item => {
+                const p = document.createElement('p');
+                p.textContent = `${item.name} - $${item.price}`;
+                cartSummary.appendChild(p);
+            });
+        }
+
+        function processPayment(event) {
+            event.preventDefault();
+            const name = document.getElementById('card-name').value;
+            const number = document.getElementById('card-number').value;
+            const expiry = document.getElementById('card-expiry').value;
+            const cvc = document.getElementById('card-cvc').value;
+            if (validatePayment(name, number, expiry, cvc)) {
+                alert(`Payment processed for ${name}`);
+                paymentForm.reset();
+                paymentForm.style.display = 'none';
+                cart.length = 0;
+                renderCart();
+            }
+        }
+
+        function validatePayment(name, number, expiry, cvc) {
+            const cardNumberRegex = /^\d{16}$/;
+            const expiryRegex = /^\d{2}\/\d{2}$/;
+            const cvcRegex = /^\d{3}$/;
+
+            if (!name.trim()) {
+                alert('Name on card is required');
+                return false;
+            }
+            if (!cardNumberRegex.test(number)) {
+                alert('Please enter a valid 16-digit card number');
+                return false;
+            }
+            if (!expiryRegex.test(expiry)) {
+                alert('Please enter a valid expiry date (MM/YY)');
+                return false;
+            }
+            if (!cvcRegex.test(cvc)) {
+                alert('Please enter a valid 3-digit CVC');
+                return false;
+            }
+            return true;
+        }
+
+        // Initial rendering of cards
+        renderCards(cards);
+    </script>
+</body>
+</html>
